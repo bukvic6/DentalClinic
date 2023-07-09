@@ -1,0 +1,41 @@
+.Home {
+    text-align: center;
+    height: 80%;
+    width: 80%;
+  }
+  h1{
+    color: rgb(0, 0, 0);
+  }
+  
+  #Calendar {
+
+    margin: auto;
+    margin-top:50px;
+    margin-bottom: 50px;
+    /* background: yellow; */
+  }
+  
+  .rbc-month-view{
+    flex-basis: 500px !important;
+  }
+  
+  .rbc-toolbar-label {
+    font-weight: bold;
+    font-size: 22px;
+    color: rgb(37, 66, 197)
+  }
+  
+  .rbc-date-cell {
+    color: rgb(8, 39, 73);
+  }
+  
+  .rbc-today {
+    background-color: rgb(196, 226, 250) !important;
+  }
+  
+  @media (max-width: 480px) {
+    .rbc-toolbar {
+      display: block !important;
+    }
+  }
+  

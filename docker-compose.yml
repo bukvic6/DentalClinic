@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+
+  dental_clinic:
+    privileged: true
+    build:
+      context: ./dental_clinic/
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+       - 8081:8081
+        
+    depends_on:
+       - postgres
+ 
+  postgres:
+    image: postgres
+    volumes:
+      - postgres:/postgres/data
+    container_name: clinic_db
+    restart: always
+    user: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: notSoSecretPassword
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 10s
+      retries: 20
+
+volumes:
+  postgres:
