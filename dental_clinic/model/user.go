@@ -9,3 +9,7 @@ type User struct {
 type LoginRequest struct {
 	Email string `json:"email"`
 }
+type LoginResponse struct {
+	Email     string `json:"email"`
+	IsDentist bool   `json:"is_dentist"`
+}

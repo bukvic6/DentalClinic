@@ -43,3 +43,11 @@ func (as *AppointmentService) CancelAppointment(id string) error {
 	return nil
 
 }
+func (as *AppointmentService) GetClientAppointments(email string) ([]*model.Appointment, error) {
+	as.l.Println("Appointment Service - GetClientAppointments")
+	appointments, err := as.repo.GetClientAppointments(email)
+	if err != nil {
+		return nil, err
+	}
+	return appointments, nil
+}

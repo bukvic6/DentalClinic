@@ -54,3 +54,13 @@ func (ar *AppointmentRepository) CancelAppointment(id string) error {
 	}
 	return nil
 }
+func (ar *AppointmentRepository) GetClientAppointments(email string) ([]*model.Appointment, error) {
+	ar.l.Println("Appointment Repository - GetClientAppointments")
+
+	var appointments []*model.Appointment
+	if err := ar.db.Where("User_Email = ?", email).Find(&appointments).Error; err != nil {
+		return nil, err
+	}
+	return appointments, nil
+
+}

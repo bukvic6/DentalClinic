@@ -24,8 +24,7 @@ func main() {
 	if err != nil {
 		l.Println("Error connecting to database")
 	}
-	authRepo := repository.InitAuthRepo(l, dbConnection)
-	authService := service.InitAuthService(l, authRepo)
+	authService := service.InitAuthService(l)
 	authController := controller.InitAuthController(l, authService)
 
 	appointmentRepo := repository.InitAppointmentRepo(l, dbConnection)
@@ -34,9 +33,9 @@ func main() {
 
 	openApi := r.Group("/api")
 	openApi.POST("/login", authController.Login)
-	openApi.POST("/register", authController.Register)
 	openApi.POST("/scheduleAppointment", appointmentController.ScheduleAppointment)
 	openApi.GET("/getAllAppointments", appointmentController.GetAppointments)
+	openApi.GET("/getClientAppointments", appointmentController.GetClientAppointments)
 	openApi.DELETE("/cancelAppointment/:appointmentId", appointmentController.CancelAppointment)
 
 	server := &http.Server{

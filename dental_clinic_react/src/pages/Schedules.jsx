@@ -1,12 +1,16 @@
+import { useState } from "react";
 import ReactBigCalendar from "../components/Calendar";
+import Myschedules from "../components/MySchedules";
 import Schedule from "../services/Schedule";
+import "./Schedules.css"
+
 
 
 
 export default function Schedules(){
     const [events, setEvents] = useState([])
-    function deleteEvent(eventId) {
-    }
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    const isDentist = currentUser && currentUser.isDentist;
 
     const getEvents = async () => {
         const {data} = await Schedule.GetAllAppointments();
@@ -19,16 +23,14 @@ export default function Schedules(){
 
     const context = {
         events: events,
-        setEvents: setEvents,
-        deleteEvent: deleteEvent
+        getEvents: getEvents,
     }
 
     return (
         <>
         <div className="schedulesContainer">
-            <h1>Hello</h1>
-            <ReactBigCalendar context={context}></ReactBigCalendar>
-            <Myschedules context={context}></Myschedules>
+        {isDentist && <ReactBigCalendar context={context} />}
+        {!isDentist && <Myschedules context={context} />}
         </div>
         </>
     )

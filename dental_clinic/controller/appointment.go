@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
+	"strings"
 )
 
 type AppointmentController struct {
@@ -55,4 +56,24 @@ func (ac *AppointmentController) CancelAppointment(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"Status": "Appointment successfully canceled!"})
+}
+
+func (ac *AppointmentController) GetClientAppointments(c *gin.Context) {
+	ac.l.Println("CommunityController - Get Appointment by client email")
+	user := c.GetHeader("Authorization")
+	if user == "" {
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"errors": "Authorization header not provided"})
+		return
+	}
+	bearer, emailString, found := strings.Cut(user, " ")
+	if !found || bearer != "UserEmail" {
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"errors": "invalid format for User in Authorization header"})
+		return
+	}
+	appointments, err := ac.service.GetClientAppointments(emailString)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, appointments)
 }

@@ -2,34 +2,27 @@ package service
 
 import (
 	"dental_clinic/model"
-	"dental_clinic/repository"
 	"log"
 )
 
 type AuthService struct {
-	l    *log.Logger
-	repo repository.IAuthRepo
+	l *log.Logger
 }
 
-func InitAuthService(log *log.Logger, repo repository.IAuthRepo) *AuthService {
+func InitAuthService(log *log.Logger) *AuthService {
 	return &AuthService{
-		l:    log,
-		repo: repo,
+		l: log,
 	}
 }
-func (as *AuthService) Login(request *model.LoginRequest) error {
+func (as *AuthService) Login(request *model.LoginRequest) *model.LoginResponse {
 	as.l.Println("User service - Login")
-	err := as.repo.Login(request)
-	if err != nil {
-		return err
+	response := &model.LoginResponse{
+		Email: request.Email,
 	}
-	return nil
-}
-func (as *AuthService) Register(user *model.User) error {
-	as.l.Println("User service - Register")
-	err := as.repo.Register(user)
-	if err != nil {
-		return err
+	if request.Email == "zubar@mail.com" {
+		response.IsDentist = true
+	} else {
+		response.IsDentist = false
 	}
-	return nil
+	return response
 }

@@ -1,41 +1,19 @@
-.Home {
-    text-align: center;
-    height: 80%;
-    width: 80%;
-  }
-  h1{
-    color: rgb(0, 0, 0);
-  }
-  
-  #Calendar {
+html {
+  height: 100%;
+}
+body {
+  min-height: 100%;
+}
 
-    margin: auto;
-    margin-top:50px;
-    margin-bottom: 50px;
-    /* background: yellow; */
+.home_image {
+      text-align: center;
+      background-image:  url("../assets/homePicture.jpg");
+        /* Full height */
+    height: 100vh; 
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
   }
-  
-  .rbc-month-view{
-    flex-basis: 500px !important;
-  }
-  
-  .rbc-toolbar-label {
-    font-weight: bold;
-    font-size: 22px;
-    color: rgb(37, 66, 197)
-  }
-  
-  .rbc-date-cell {
-    color: rgb(8, 39, 73);
-  }
-  
-  .rbc-today {
-    background-color: rgb(196, 226, 250) !important;
-  }
-  
-  @media (max-width: 480px) {
-    .rbc-toolbar {
-      display: block !important;
-    }
-  }
-  
+

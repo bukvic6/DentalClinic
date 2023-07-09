@@ -73,7 +73,6 @@ export default function ReactBigCalendar({context}){
     },[]);
     return (
         <div className='Calendar'>
-            <h1>hello</h1>
             <Calendar
             dayLayoutAlgorithm={nooverlap}
             localizer={localizer}
