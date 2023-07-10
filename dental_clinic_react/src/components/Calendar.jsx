@@ -13,7 +13,7 @@ export default function ReactBigCalendar({context}){
     const [email, setEmail] = useState("");
     const [dentistModal, setDentistModal] = useState(false);
     const [modalData, setModalData] = useState({ event_id: '', start: '', end: '', title: '' });
-    const [modalDentistData, setModalDentistData] = useState({ start: '', end: ''});
+    const [modalDentistData, setModalDentistData] = useState({ start: new Date, end: new Date});
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     const isDentist = currentUser && currentUser.isDentist;
       
@@ -35,6 +35,9 @@ export default function ReactBigCalendar({context}){
         }, [events]);
 
     const setNewAppointment = async ({ start, end }) => {
+      if (start < new Date()){
+         return null
+      } 
       const hasAppointmentOverlap = hasOverlap(start, end);
       const duration = end - start;
     
@@ -71,9 +74,9 @@ export default function ReactBigCalendar({context}){
       setDentistModal(!dentistModal);
     };
     
-    const handleSelectEvent = ({event_id, start, end, title}) => { 
-      //THIS IS FOR DENTIST, is needs to be disabled for user
-      setModalData({ event_id, start, end, title });
+    const handleSelectEvent = ({id, start, end, title}) => { 
+      console.log(start)
+      setModalData({ event_id:id, start:start.toISOString(), end:end.toISOString(), title:title });
       toggleModal();
     }
     
@@ -126,7 +129,8 @@ export default function ReactBigCalendar({context}){
             <div onClick={toggleModal} className="overlay"></div>
             <div className="modal-content">
               <h2>{modalData.title}</h2>
-              <p>{modalData.event_id}</p>
+              <p>{modalData.start}</p>
+              <p>{modalData.end}</p>
               <button className="close-modal" onClick={handleCancelAppointment}>
                 cancel appointment
               </button>

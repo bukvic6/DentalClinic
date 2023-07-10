@@ -43,7 +43,7 @@ func main() {
 	openApi.GET("/getAllAppointments", appointmentController.GetAppointments)
 	openApi.GET("/getClientAppointments", appointmentController.GetClientAppointments)
 	openApi.DELETE("/cancelAppointment/:appointmentId", appointmentController.CancelAppointment)
-	openApi.POST("/scheduleAppointmentAsDentist", appointmentController.ScheduleAppointmentAsDentist)
+	openApi.PUT("/changeHours/:hours", appointmentController.ChangeHoursNeededForCancellation)
 
 	server := &http.Server{
 		Addr:           ":8081",

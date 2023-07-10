@@ -51,3 +51,11 @@ func (as *AppointmentService) GetClientAppointments(email string) ([]*model.Appo
 	}
 	return appointments, nil
 }
+func (as *AppointmentService) ChangeHoursForCancellation(neededHours string) error {
+	as.l.Println("Appointment Service - Change Hours needed for cancellation")
+	err := as.repo.ChangeHoursForCancellation(neededHours)
+	if err != nil {
+		return err
+	}
+	return nil
+}

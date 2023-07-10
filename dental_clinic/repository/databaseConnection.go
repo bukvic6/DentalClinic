@@ -21,6 +21,15 @@ func PostgreSQLConnection(l *log.Logger) (*gorm.DB, error) {
 	return db, nil
 }
 func setup(db *gorm.DB) {
+	db.AutoMigrate(&model.Preferences{})
+	var preferences model.Preferences
+	db.First(&preferences, 1)
+	if preferences.Id == 0 {
+		db.Create(&model.Preferences{
+			Id:                        1,
+			TimeNeededForCancellation: 24,
+		})
+	}
 	err := db.AutoMigrate(&model.Appointment{})
 	if err != nil {
 		log.Println("Error initializing table")

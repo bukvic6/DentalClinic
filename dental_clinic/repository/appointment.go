@@ -62,5 +62,13 @@ func (ar *AppointmentRepository) GetClientAppointments(email string) ([]*model.A
 		return nil, err
 	}
 	return appointments, nil
+}
+func (ar *AppointmentRepository) ChangeHoursForCancellation(hours string) error {
+	ar.l.Println("Appointment Repository - GetClientAppointments")
 
+	var preferences *model.Preferences
+	if err := ar.db.Model(&preferences).Where("id = ?", 1).Update("time_needed_for_cancellation", hours).Error; err != nil {
+		return err
+	}
+	return nil
 }
