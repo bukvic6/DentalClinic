@@ -18,8 +18,14 @@ import (
 func main() {
 	l := log.New(os.Stdout, "Dental_clinic", log.LstdFlags)
 	r := gin.Default()
-	r.Use(cors.Default())
-
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:3000"},
+		AllowMethods:     []string{"POST", "GET", "OPTIONS", "PUT", "DELETE"},
+		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "User-Agent", "Referrer", "Host", "Token", "Authorization"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}))
 	dbConnection, err := repository.PostgreSQLConnection(l)
 	if err != nil {
 		l.Println("Error connecting to database")

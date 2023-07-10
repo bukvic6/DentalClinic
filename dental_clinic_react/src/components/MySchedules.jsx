@@ -1,17 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Schedule from "../services/Schedule";
 import "./MySchedules.css"
 
-export default function Myschedules(){
+export default function Myschedules({context}){
+  const events = context.events
+  const getEvents = context.getEvents
+
+
     const [myevents, setMyEvents] = useState([])    
 
-    const getEvents = async () => {
-      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-      const headers = {
-          Authorization: `UserEmail ${currentUser.email}`,
-        };
-
-        const {data} = await Schedule.GetAllUserAppointments(headers);
+    const getEventsfromClient = async () => {
+        const {data} = await Schedule.GetAllUserAppointments();
         data.forEach((e) => {
             e.start = new Date(e.start)
             e.end = new Date(e.end)
@@ -19,13 +18,19 @@ export default function Myschedules(){
         setMyEvents(data)
     }
     const cancelEvent = async (eventId) =>{
+      console.log(eventId)
         try {
           await Schedule.CancelAppointment(eventId);
-          await getEvents();
+          getEvents();
+          getEventsfromClient();
         } catch (error) {
           console.log(error.response)
         }
-      }
+    }
+    useEffect(() => {
+      getEventsfromClient();
+    },[]);
+    
 
     return(
         <>
@@ -48,7 +53,7 @@ export default function Myschedules(){
                   {event.start.toLocaleTimeString()} - {event.end.toLocaleTimeString()}
                 </div>
                 <div className="col col-4" data-label="Cancel">
-                  <button onClick={() => cancelEvent(event.id)}>Cancel</button>
+                  <button onClick={() => cancelEvent(event.event_id)}>Cancel</button>
                 </div>
               </li>
             ))}

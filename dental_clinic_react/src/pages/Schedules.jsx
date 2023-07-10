@@ -29,8 +29,13 @@ export default function Schedules(){
     return (
         <>
         <div className="schedulesContainer">
+        {!isDentist && (
+            <>
+            <ReactBigCalendar context={context} />
+            <Myschedules context={context} />
+            </>
+        )}
         {isDentist && <ReactBigCalendar context={context} />}
-        {!isDentist && <Myschedules context={context} />}
         </div>
         </>
     )
