@@ -4,6 +4,7 @@ import (
 	"dental_clinic/model"
 	"dental_clinic/repository"
 	"log"
+	"net/smtp"
 )
 
 type AppointmentService struct {
@@ -40,6 +41,36 @@ func (as *AppointmentService) CancelAppointment(id string) error {
 	if err != nil {
 		return err
 	}
+
+	from := "mailfortesting94@gmail.com"
+	password := "oizguuxxzffjnvqb"
+	to := []string{
+		"bukvic6@gmail.com",
+	}
+	smtpHost := "smtp.gmail.com"
+	smtpPort := "587"
+	address := smtpHost + ":" + smtpPort
+	var subject string
+	var body string
+
+	subject = "Dental_clinic"
+	body = "Your reservation has been canceled"
+
+	stringMsg :=
+		"From: " + from + "\n" +
+			"To: " + to[0] + "\n" +
+			"Subject: " + subject + "\n\n" +
+			body
+
+	message := []byte(stringMsg)
+
+	auth := smtp.PlainAuth("", from, password, smtpHost)
+	err = smtp.SendMail(address, auth, from, to, message)
+	if err != nil {
+		log.Println("Error sending mail", err)
+		return err
+	}
+	as.l.Println("Mail successfully sent")
 	return nil
 
 }
