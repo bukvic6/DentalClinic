@@ -2,14 +2,6 @@ import axios from "axios";
 
 const SCHEDULE_BASE_API = "http://localhost:8081/api"
 
-const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-// const headedrs = {
-//     Authorization: `UserEmail ${currentUser.userEmail}`,
-// };
-const headers = {
-    'Content-Type': 'application/json',
-    'Authorization': `UserEmail ${currentUser.userEmail}`
-  }
 
 class ScheduleService {
     
@@ -25,7 +17,7 @@ class ScheduleService {
     CancelAppointment(id){
         return axios.delete(SCHEDULE_BASE_API + `/cancelAppointment/${id}`)
     }
-    GetAllUserAppointments(){
+    GetAllUserAppointments(headers){
         return axios.get(SCHEDULE_BASE_API + `/getClientAppointments`, {headers: headers})
     }
 }

@@ -10,7 +10,12 @@ export default function ReactBigCalendar({context}){
     const events = context.events
     const getEvents = context.getEvents
     const [modal, setModal] = useState(false);
+    const [email, setEmail] = useState("");
+    const [dentistModal, setDentistModal] = useState(false);
     const [modalData, setModalData] = useState({ event_id: '', start: '', end: '', title: '' });
+    const [modalDentistData, setModalDentistData] = useState({ start: '', end: ''});
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    const isDentist = currentUser && currentUser.isDentist;
       
     const {defaultDate, minDate, maxDate, nooverlap} = useMemo(() => ({
         defaultDate: new Date(),
@@ -30,36 +35,51 @@ export default function ReactBigCalendar({context}){
         }, [events]);
 
     const setNewAppointment = async ({ start, end }) => {
-        if (hasOverlap(start, end)) {
-          window.alert("You cannot book already reserved appointment.");
-          return;
-        }
-        const appointment = { title: "bukvic6@gmail.com", start, end };
-        const duration = end - start;
-        try {
-          if (duration <= 3600000) {
-            const resp = await Schedule.ScheduleAppointment(appointment);
-            await getEvents();
-          } else {
-            window.alert("The appointment should not last more than 1 hour.");
-          }
-        } catch (error) {
-          console.log(error);
-        }
-      };
-
-      const toggleModal = () => {
-        setModal(!modal);
-      };
+      const hasAppointmentOverlap = hasOverlap(start, end);
+      const duration = end - start;
     
-    const handleSelectEvent = ({event_id,start, end, title}) => { 
-      console.log(event_id)
-        setModalData({ event_id, start, end, title });
-         setModal(!modal);
-    }
+      if (hasAppointmentOverlap || duration >= 3600000) {
+        window.alert("Please check your appointment details.");
+    
+        if (hasAppointmentOverlap) {
+          console.log("There is an overlap with an existing appointment.");
+        }
+    
+        if (duration >= 3600000) {
+          console.log("The appointment should not last more than 1 hour.");
+        }
+        return;
+      }
+      if (isDentist) {
+        setModalDentistData({ start: start.toISOString(), end: end.toISOString()});
+        toggleDentistModal();
+        return;
+      }
+      try {
+          const appointment = { title: currentUser.email, start, end };
+          const resp = await Schedule.ScheduleAppointment(appointment);
+          await getEvents();
+        } catch (error) {
+        console.log(error);
+      }
+      };
 
+    const toggleModal = () => {
+      setModal(!modal);
+    };
+    const toggleDentistModal = () => {
+      setDentistModal(!dentistModal);
+    };
+    
+    const handleSelectEvent = ({event_id, start, end, title}) => { 
+      //THIS IS FOR DENTIST, is needs to be disabled for user
+      setModalData({ event_id, start, end, title });
+      toggleModal();
+    }
+    
     const handleCancelAppointment = async () =>{
       try {
+        //SHOULD PASS USER EMAIL FOR VERIFICATION
         await Schedule.CancelAppointment(modalData.event_id);
         await getEvents();
         toggleModal();
@@ -67,13 +87,26 @@ export default function ReactBigCalendar({context}){
         console.log(error.response)
       }
     }
-    
+    const handleCreateAppointment = async (e) =>{
+      e.preventDefault()
+      try {    
+        const appointment = { title: email, start: modalDentistData.start, end: modalDentistData.end};
+        console.log(appointment.toString())
+        await Schedule.ScheduleAppointment(appointment);
+        await getEvents();
+        setEmail("")
+        toggleDentistModal();
+      } catch (error) {
+        console.log(error.response)
+      }
+    }
     useEffect(() => {
         getEvents();
     },[]);
     return (
         <div className='Calendar'>
             <Calendar
+            
             dayLayoutAlgorithm={nooverlap}
             localizer={localizer}
             views={["day", "work_week"]}
@@ -81,30 +114,44 @@ export default function ReactBigCalendar({context}){
             minDate={new Date()}
             defaultView="work_week"
             timeslots={1}
-            selectable
-            onSelectEvent={handleSelectEvent}
+            selectable="ignoreEvents"
+            onSelectEvent={isDentist ? handleSelectEvent : null}
             onSelectSlot={setNewAppointment}
             defaultDate={defaultDate}
             min={minDate}
             max={maxDate}
             />
-
-          
-      {modal && (
-          <div className="modal">
-          <div onClick={toggleModal} className="overlay"></div>
-          <div className="modal-content">
-            <h2>{modalData.title}</h2>
-            <p>{modalData.event_id}</p>
-            <button className="close-modal" onClick={handleCancelAppointment}>
-              cancel appointment
-            </button>
+        {modal && (
+            <div className="modal">
+            <div onClick={toggleModal} className="overlay"></div>
+            <div className="modal-content">
+              <h2>{modalData.title}</h2>
+              <p>{modalData.event_id}</p>
+              <button className="close-modal" onClick={handleCancelAppointment}>
+                cancel appointment
+              </button>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+        {dentistModal && (
+            <div className="modal">
+            <div onClick={toggleDentistModal} className="overlay"></div>
+            <div className="modal-content">
+              <form onSubmit={handleCreateAppointment}>
+                <p>{modalDentistData.start}</p>
+                <p>{modalDentistData.end}</p>
+                <label htmlFor="email">Email:</label>
+                <input type="email" id="email" name="email"  value={email} onChange={(e) => setEmail(e.target.value)} required />
+                <button type="submit" className="create-appointment">
+                  Create appointment
+                </button>
+              </form>
+            </div>
+          </div>
+        )}
           
           
-        </div>
+      </div>
         
     )
     

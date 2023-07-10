@@ -5,18 +5,25 @@ import "./MySchedules.css"
 export default function Myschedules({context}){
   const events = context.events
   const getEvents = context.getEvents
+  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+
+  const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `UserEmail ${currentUser.userEmail}`
+    }
 
 
     const [myevents, setMyEvents] = useState([])    
 
     const getEventsfromClient = async () => {
-        const {data} = await Schedule.GetAllUserAppointments();
+        const {data} = await Schedule.GetAllUserAppointments(headers);
         data.forEach((e) => {
             e.start = new Date(e.start)
             e.end = new Date(e.end)
         })
         setMyEvents(data)
     }
+    
     const cancelEvent = async (eventId) =>{
       console.log(eventId)
         try {
