@@ -8,4 +8,5 @@ type IAppointmentService interface {
 	CancelAppointment(id string) error
 	GetClientAppointments(email string) ([]*model.Appointment, error)
 	ChangeHoursForCancellation(neededHours string) error
+	GetHour() (hour int, err error)
 }

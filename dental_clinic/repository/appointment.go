@@ -72,3 +72,15 @@ func (ar *AppointmentRepository) ChangeHoursForCancellation(hours string) error 
 	}
 	return nil
 }
+func (ar *AppointmentRepository) GetHour() (preferences *model.Preferences, err error) {
+	ar.l.Println("Appointment Repository - GetClientAppointments")
+
+	hour := &model.Preferences{}
+
+	if err := ar.db.Where("Id = ?", 1).First(hour).Error; err != nil {
+		return nil, err
+	}
+
+	return hour, nil
+
+}

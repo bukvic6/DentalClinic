@@ -88,3 +88,14 @@ func (ac *AppointmentController) ChangeHoursNeededForCancellation(c *gin.Context
 	c.JSON(http.StatusOK, gin.H{"Status": "Hours needed for cancelling changed"})
 
 }
+
+func (ac *AppointmentController) GetHour(c *gin.Context) {
+	ac.l.Println("CommunityController - Change Hours Needed for cancelation")
+	hour, err := ac.service.GetHour()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, hour)
+
+}

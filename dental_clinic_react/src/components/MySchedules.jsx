@@ -5,15 +5,16 @@ import "./MySchedules.css"
 export default function Myschedules({context}){
   const events = context.events
   const getEvents = context.getEvents
+  const hour = context.hour
+  const getHour = context.getHour
+  const [myevents, setMyEvents] = useState([])    
+
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
   const headers = {
       'Content-Type': 'application/json',
       'Authorization': `UserEmail ${currentUser.userEmail}`
     }
-
-
-    const [myevents, setMyEvents] = useState([])    
 
     const getEventsfromClient = async () => {
         const {data} = await Schedule.GetAllUserAppointments(headers);

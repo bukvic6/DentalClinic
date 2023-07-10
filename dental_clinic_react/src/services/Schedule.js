@@ -20,5 +20,11 @@ class ScheduleService {
     GetAllUserAppointments(headers){
         return axios.get(SCHEDULE_BASE_API + `/getClientAppointments`, {headers: headers})
     }
+    ChangeCancellationHours(hours){
+        return axios.put(SCHEDULE_BASE_API + `/changeHours/${hours}`)
+    }
+    GetCancellationHour(){
+        return axios.get(SCHEDULE_BASE_API + `/getHour`)
+    }
 }
 export default new ScheduleService()

@@ -59,3 +59,11 @@ func (as *AppointmentService) ChangeHoursForCancellation(neededHours string) err
 	}
 	return nil
 }
+func (as *AppointmentService) GetHour() (hour int, err error) {
+	as.l.Println("Appointment Service - Change Hours needed for cancellation")
+	preferences, err := as.repo.GetHour()
+	if err != nil {
+		return 0, err
+	}
+	return preferences.TimeNeededForCancellation, nil
+}

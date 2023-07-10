@@ -43,6 +43,7 @@ func main() {
 	openApi.GET("/getAllAppointments", appointmentController.GetAppointments)
 	openApi.GET("/getClientAppointments", appointmentController.GetClientAppointments)
 	openApi.DELETE("/cancelAppointment/:appointmentId", appointmentController.CancelAppointment)
+	openApi.GET("/getHour", appointmentController.GetHour)
 	openApi.PUT("/changeHours/:hours", appointmentController.ChangeHoursNeededForCancellation)
 
 	server := &http.Server{

@@ -24,6 +24,7 @@ export default function ReactBigCalendar({context}){
         nooverlap: "no-overlap"
 
     }))
+
     const hasOverlap = useCallback((start, end ) => {
         const overlappingEvents = events.filter(event => {
             return (
@@ -59,7 +60,8 @@ export default function ReactBigCalendar({context}){
         return;
       }
       try {
-          const appointment = { title: currentUser.email, start, end };
+          console.log(currentUser.userEmail)
+          const appointment = { title: currentUser.userEmail, start, end };
           const resp = await Schedule.ScheduleAppointment(appointment);
           await getEvents();
         } catch (error) {
@@ -74,9 +76,9 @@ export default function ReactBigCalendar({context}){
       setDentistModal(!dentistModal);
     };
     
-    const handleSelectEvent = ({id, start, end, title}) => { 
+    const handleSelectEvent = ({event_id, start, end, title}) => { 
       console.log(start)
-      setModalData({ event_id:id, start:start.toISOString(), end:end.toISOString(), title:title });
+      setModalData({ event_id:event_id, start:start.toISOString(), end:end.toISOString(), title:title });
       toggleModal();
     }
     
