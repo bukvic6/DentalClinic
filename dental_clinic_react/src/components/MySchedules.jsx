@@ -37,7 +37,13 @@ export default function Myschedules({context}){
     }
     useEffect(() => {
       getEventsfromClient();
+      getHour();
     },[]);
+
+    const shouldShowCancel = (event) => {
+      const timeDifference = event.start - new Date();
+      return timeDifference > hour * 60 * 60 * 1000;
+    };
     
 
     return(
@@ -53,7 +59,9 @@ export default function Myschedules({context}){
 
                 </li>
                 {myevents.map((event) => (
-              <li className="table-row" key={event.id}>
+                  
+                  
+                <li className="table-row" key={event.id}>
                 <div className="col col-2" data-label="Date">
                   {event.start.toDateString()}
                 </div>
@@ -61,7 +69,9 @@ export default function Myschedules({context}){
                   {event.start.toLocaleTimeString()} - {event.end.toLocaleTimeString()}
                 </div>
                 <div className="col col-4" data-label="Cancel">
-                  <button onClick={() => cancelEvent(event.event_id)}>Cancel</button>
+                  {shouldShowCancel(event) && (
+                    <button onClick={() => cancelEvent(event.event_id)}>Cancel</button>
+                  )}
                 </div>
               </li>
             ))}
