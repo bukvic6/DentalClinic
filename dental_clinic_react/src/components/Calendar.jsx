@@ -44,17 +44,15 @@ export default function ReactBigCalendar({context}){
       const hasAppointmentOverlap = hasOverlap(start, end);
       const duration = end - start;
     
-      if (hasAppointmentOverlap || duration >= 3600000) {
-        window.alert("Please check your appointment details.");
-    
-        if (hasAppointmentOverlap) {
-          console.log("There is an overlap with an existing appointment.");
-        }
-    
-        if (duration >= 3600000) {
-          console.log("The appointment should not last more than 1 hour.");
-        }
+      if (hasAppointmentOverlap) {
+        window.alert("There is an overlap with an existing appointment.");
         return;
+      }
+  
+      if (duration > 3600000) {
+        window.alert("The appointment should not last more than 1 hour.");
+        return;
+
       }
       if (isDentist) {
         setModalDentistData({ start: start.toISOString(), end: end.toISOString()});
@@ -70,7 +68,7 @@ export default function ReactBigCalendar({context}){
         } catch (error) {
         console.log(error);
       }
-      };
+    };
 
     const toggleModal = () => {
       setModal(!modal);
@@ -87,8 +85,8 @@ export default function ReactBigCalendar({context}){
     
     const handleCancelAppointment = async () =>{
       try {
-        //SHOULD PASS USER EMAIL FOR VERIFICATION
-        await Schedule.CancelAppointment(modalData.event_id);
+        const cancelRequest = { user_email: modalData.title, start:modalData.start};
+        await Schedule.CancelAppointment(modalData.event_id,cancelRequest);
         await getEvents();
         await getFutureEvents();
         toggleModal();

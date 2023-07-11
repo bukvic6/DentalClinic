@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Schedule from "../services/Schedule";
+import { Input, Button, ButtonGroup, Box, Center, AbsoluteCenter } from "@chakra-ui/react";
 import "./Home.css"
 
 export default function Home() {
@@ -27,16 +28,14 @@ export default function Home() {
     return (
       <>
       <body>
-      <div className="home_image">
-        <div class="hero-text">
-          <h1 >I am John Doe</h1>
-          <p>And I'm a Photographer</p>
+      <Box position='relative' className="home_image">
+        <AbsoluteCenter w='30%' p='4' color='white' axis='both'>
           <form onSubmit={handleSubmit}> 
-            <input className="logininput" type="text" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Your email" name="uname" />
-            <button className='buttonLogin' type="submit">Login</button>
+            <Input backgroundColor='gray.200' borderColor='gray.400' variant='outline' size='lg' required color='gray.700' placeholder='Email'   type="email" value={email} onChange={(e) => setEmail(e.target.value)}  name="uname" />
+            <Button mt='1.5' colorScheme='teal' variant='solid' type="submit">Login</Button>
           </form>
-        </div>
-        </div>
+        </AbsoluteCenter>
+      </Box>
 
       </body>
       </>

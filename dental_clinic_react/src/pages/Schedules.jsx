@@ -1,3 +1,5 @@
+import { Box, Center, Flex, Grid, Spacer } from "@chakra-ui/layout";
+import { Button } from "@chakra-ui/react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ReactBigCalendar from "../components/Calendar";
@@ -52,8 +54,11 @@ export default function Schedules(){
 
     return (
         <>
-        <div className="schedulesContainer">
-        <button onClick={handleLogout}>Logout</button>
+        <Flex flexDirection={'column'} className="schedulesContainer">
+        <Flex mt={5} mr={5} justify="end">
+        <Button  onClick={handleLogout}>Logout</Button>
+        </Flex>
+        <Flex p='10' flexDirection={'row'}>
         {!isDentist && (
             <>
             <ReactBigCalendar context={context} />
@@ -66,7 +71,9 @@ export default function Schedules(){
             <HoursForm context={context} />
             </>
         )}
-        </div>
+
+        </Flex>
+        </Flex>
         </>
     )
 }

@@ -3,6 +3,7 @@ package service
 import (
 	"dental_clinic/model"
 	"dental_clinic/repository"
+	"fmt"
 	"log"
 	"net/smtp"
 )
@@ -35,7 +36,7 @@ func (as *AppointmentService) GetAppointments() ([]*model.Appointment, error) {
 	}
 	return appointments, nil
 }
-func (as *AppointmentService) CancelAppointment(id string) error {
+func (as *AppointmentService) CancelAppointment(id string, cancelRequest *model.CancelAppointmentRequest) error {
 	as.l.Println("Appointment Service - GetAppointments")
 	err := as.repo.CancelAppointment(id)
 	if err != nil {
@@ -45,7 +46,7 @@ func (as *AppointmentService) CancelAppointment(id string) error {
 	from := "mailfortesting94@gmail.com"
 	password := "oizguuxxzffjnvqb"
 	to := []string{
-		"bukvic6@gmail.com",
+		cancelRequest.UserEmail,
 	}
 	smtpHost := "smtp.gmail.com"
 	smtpPort := "587"
@@ -53,9 +54,10 @@ func (as *AppointmentService) CancelAppointment(id string) error {
 	var subject string
 	var body string
 
-	subject = "Dental_clinic"
-	body = "Your reservation has been canceled"
+	startDate := cancelRequest.StartDate
 
+	subject = "Dental_clinic"
+	body = fmt.Sprintf("Your reservation for %s has been canceled.", startDate)
 	stringMsg :=
 		"From: " + from + "\n" +
 			"To: " + to[0] + "\n" +

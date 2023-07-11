@@ -1,3 +1,4 @@
+import { Box, Button, Center, Flex, FormControl, FormLabel, Input, NumberDecrementStepper, NumberIncrementStepper, NumberInput, NumberInputField, NumberInputStepper } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import Schedule from "../services/Schedule";
 
@@ -23,18 +24,21 @@ export default function HoursForm({context}){
 
     return(
         <>
-        <div className="hoursFormContainer">
+
+        <Box  p='10' className="hoursFormContainer">
         <form onSubmit={handleChangeHours} action="POST">
-            <h2>Setup </h2>
-            <label htmlFor="hour">Change cancellation hours: </label>
-            <input type="number" id="hour" name="hour" defaultValue={hour} required />
-            <button type="submit" className="cancellation-hours">
-                Change
-            </button>
+        <Flex flexDirection='column'>
+            <h2>Preferences</h2>
+            <Center>
+            <label htmlFor="hour">Cancellation hours</label>
+            </Center>
+            <Input min={1} type="number" id="hour" name="hour" defaultValue={hour} required />
+            <Button m='3' type='submit' colorScheme='teal' variant='solid'>Submit</Button>
+        </Flex>            
         </form>
         {successMessage && <p>{successMessage}</p>}
-            
-        </div>
+
+        </Box>
         </>
     )
 }

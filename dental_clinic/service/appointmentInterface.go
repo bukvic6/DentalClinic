@@ -5,7 +5,7 @@ import "dental_clinic/model"
 type IAppointmentService interface {
 	ScheduleAppointment(request *model.AppointmentRequest) error
 	GetAppointments() ([]*model.Appointment, error)
-	CancelAppointment(id string) error
+	CancelAppointment(id string, request *model.CancelAppointmentRequest) error
 	GetClientAppointments(email string) ([]*model.Appointment, error)
 	ChangeHoursForCancellation(neededHours string) error
 	GetHour() (hour int, err error)

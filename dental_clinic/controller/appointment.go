@@ -50,7 +50,13 @@ func (ac *AppointmentController) CancelAppointment(c *gin.Context) {
 	ac.l.Println("CommunityController - CancelAppointment")
 
 	appointmentId := c.Param("appointmentId")
-	err := ac.service.CancelAppointment(appointmentId)
+	var cancelRequest model.CancelAppointmentRequest
+
+	if err := c.ShouldBindJSON(&cancelRequest); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"Error": err.Error()})
+		return
+	}
+	err := ac.service.CancelAppointment(appointmentId, &cancelRequest)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return

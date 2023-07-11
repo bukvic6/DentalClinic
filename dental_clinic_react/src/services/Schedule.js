@@ -17,9 +17,8 @@ class ScheduleService {
     GetFutureAppointments(){
         return axios.get(SCHEDULE_BASE_API + "/getFutureAppointments")
     }
-    CancelAppointment(id){
-        return axios.delete(SCHEDULE_BASE_API + `/cancelAppointment/${id}`)
-    }
+    CancelAppointment(id, cancelRequest){
+        return axios.delete(SCHEDULE_BASE_API + `/cancelAppointment/${id}`, { data: cancelRequest });    }
     GetAllUserAppointments(headers){
         return axios.get(SCHEDULE_BASE_API + `/getClientAppointments`, {headers: headers})
     }

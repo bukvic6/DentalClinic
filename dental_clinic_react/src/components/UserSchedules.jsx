@@ -1,5 +1,20 @@
 import { useEffect, useState } from "react";
 import Schedule from "../services/Schedule";
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tfoot,
+  Tr,
+  Th,
+  Td,
+  TableCaption,
+  TableContainer,
+  Button,
+  Center,
+  Heading,
+  Box,
+} from '@chakra-ui/react'
 import "./UserSchedules.css"
 
 export default function Myschedules({context}){
@@ -26,14 +41,15 @@ export default function Myschedules({context}){
         setMyEvents(data)
     }
     
-    const cancelEvent = async (eventId) =>{
+    const cancelEvent = async (eventId, start) =>{
       console.log(eventId)
         try {
-          await Schedule.CancelAppointment(eventId);
+          const cancelRequest = { user_email: currentUser.userEmail, start:start};
+          await Schedule.CancelAppointment(eventId, cancelRequest);
           getEvents();
           getEventsfromClient();
         } catch (error) {
-          console.log(error.response)
+          console.log("Error cancelling appointment:", error);   
         }
     }
     useEffect(() => {
@@ -49,36 +65,40 @@ export default function Myschedules({context}){
 
     return(
         <>
-        <div className="myChedulesContainer">
-        <div class="container">
-            <h2>My Schedules</h2>
-            <ul class="responsive-table">
-                <li class="table-header">
-                <div class="col col-2">Date</div>
-                <div class="col col-4">Time</div>
-                <div class="col col-4">Cancel</div>
+        <Box ml={6} className="myChedulesContainer">
+        <Center>
+          <Heading as='h2'>Appointments</Heading>
+        </Center>
+        <TableContainer>
+          <Table variant='striped'>
+            <Thead colorScheme='teal'>
+              <Tr>
+                <Th>Date</Th>
+                <Th>Time</Th>
+                <Th>Cancellation</Th>
+              </Tr>
+            </Thead>
 
-                </li>
-                {myevents.map((event) => (
-                  
-                  
-                <li className="table-row" key={event.id}>
-                <div className="col col-2" data-label="Date">
+            <Tbody>
+            {myevents.map((event) => (
+              <Tr className="table-row" key={event.id}>
+                <Td className="col col-2" data-label="Date">
                   {event.start.toDateString()}
-                </div>
-                <div className="col col-4" data-label="Time">
+                </Td>
+                <Td className="col col-4" data-label="Time">
                   {event.start.toLocaleTimeString()} - {event.end.toLocaleTimeString()}
-                </div>
-                <div className="col col-4" data-label="Cancel">
+                </Td>
+                <Td className="col col-4" data-label="Cancel">
                   {shouldShowCancel(event) && (
-                    <button onClick={() => cancelEvent(event.event_id)}>Cancel</button>
+                    <Button colorScheme='red' onClick={() => cancelEvent(event.event_id, event.start)}>Cancel</Button>
                   )}
-                </div>
-              </li>
+                </Td>
+              </Tr>
             ))}
-            </ul>
-            </div>
-        </div>
+          </Tbody>
+          </Table>
+        </TableContainer>
+        </Box>
         </>
     )
 }
