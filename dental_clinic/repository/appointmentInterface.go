@@ -9,4 +9,5 @@ type IAppointmentRepo interface {
 	GetClientAppointments(email string) ([]*model.Appointment, error)
 	ChangeHoursForCancellation(hours string) error
 	GetHour() (preferences *model.Preferences, err error)
+	GetFutureAppointments() ([]*model.FutureAppointments, error)
 }

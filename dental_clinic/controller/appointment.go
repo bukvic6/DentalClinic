@@ -99,3 +99,14 @@ func (ac *AppointmentController) GetHour(c *gin.Context) {
 	c.JSON(http.StatusOK, hour)
 
 }
+
+func (ac *AppointmentController) GetFuture(c *gin.Context) {
+	ac.l.Println("CommunityController - Get Future Appointments")
+
+	appointments, err := ac.service.GetFutureAppointments()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, appointments)
+}

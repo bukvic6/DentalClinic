@@ -14,6 +14,9 @@ class ScheduleService {
     GetAllAppointments(){
         return axios.get(SCHEDULE_BASE_API + "/getAllAppointments")
     }
+    GetFutureAppointments(){
+        return axios.get(SCHEDULE_BASE_API + "/getFutureAppointments")
+    }
     CancelAppointment(id){
         return axios.delete(SCHEDULE_BASE_API + `/cancelAppointment/${id}`)
     }

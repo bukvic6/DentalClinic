@@ -98,3 +98,11 @@ func (as *AppointmentService) GetHour() (hour int, err error) {
 	}
 	return preferences.TimeNeededForCancellation, nil
 }
+func (as *AppointmentService) GetFutureAppointments() ([]*model.FutureAppointments, error) {
+	as.l.Println("Appointment Service - Get Future appointments")
+	appointments, err := as.repo.GetFutureAppointments()
+	if err != nil {
+		return nil, err
+	}
+	return appointments, nil
+}

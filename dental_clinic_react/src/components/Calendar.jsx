@@ -9,6 +9,8 @@ const localizer = momentLocalizer(moment)
 export default function ReactBigCalendar({context}){
     const events = context.events
     const getEvents = context.getEvents
+    const futureEvents = context.futureEvents
+    const getFutureEvents = context.getFutureEvents
     const [modal, setModal] = useState(false);
     const [email, setEmail] = useState("");
     const [dentistModal, setDentistModal] = useState(false);
@@ -26,14 +28,14 @@ export default function ReactBigCalendar({context}){
     }))
 
     const hasOverlap = useCallback((start, end ) => {
-        const overlappingEvents = events.filter(event => {
-            return (
-                ((event.start >= start && event.start < end) || (event.end > start && event.end <= end)) ||
-                ((start >= event.start && start < event.end) || (end > event.start && end <= event.end))
-              );
-          });
-          return overlappingEvents.length > 0;
-        }, [events]);
+    const overlappingEvents = events.filter(event => {
+        return (
+            ((event.start >= start && event.start < end) || (event.end > start && event.end <= end)) ||
+            ((start >= event.start && start < event.end) || (end > event.start && end <= event.end))
+          );
+      });
+      return overlappingEvents.length > 0;
+    }, [events]);
 
     const setNewAppointment = async ({ start, end }) => {
       if (start < new Date()){
@@ -64,6 +66,7 @@ export default function ReactBigCalendar({context}){
           const appointment = { title: currentUser.userEmail, start, end };
           const resp = await Schedule.ScheduleAppointment(appointment);
           await getEvents();
+          await getFutureEvents();
         } catch (error) {
         console.log(error);
       }
@@ -87,6 +90,7 @@ export default function ReactBigCalendar({context}){
         //SHOULD PASS USER EMAIL FOR VERIFICATION
         await Schedule.CancelAppointment(modalData.event_id);
         await getEvents();
+        await getFutureEvents();
         toggleModal();
       } catch (error) {
         console.log(error.response)
@@ -99,6 +103,7 @@ export default function ReactBigCalendar({context}){
         console.log(appointment.toString())
         await Schedule.ScheduleAppointment(appointment);
         await getEvents();
+        await getFutureEvents();
         setEmail("")
         toggleDentistModal();
       } catch (error) {
@@ -107,15 +112,15 @@ export default function ReactBigCalendar({context}){
     }
     useEffect(() => {
         getEvents();
+        getFutureEvents();
     },[]);
     return (
         <div className='Calendar'>
-            <Calendar
-            
+            <Calendar    
             dayLayoutAlgorithm={nooverlap}
             localizer={localizer}
             views={["day", "work_week"]}
-            events={events}
+            events={isDentist ? events : futureEvents}
             minDate={new Date()}
             defaultView="work_week"
             timeslots={1}

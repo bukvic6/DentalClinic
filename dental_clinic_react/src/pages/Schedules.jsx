@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ReactBigCalendar from "../components/Calendar";
 import HoursForm from "../components/HoursForm";
-import Myschedules from "../components/MySchedules";
+import Myschedules from "../components/UserSchedules";
 import Schedule from "../services/Schedule";
 import "./Schedules.css"
 
@@ -11,6 +11,7 @@ import "./Schedules.css"
 
 export default function Schedules(){
     const [events, setEvents] = useState([])
+    const [futureEvents, setFutureEvents] = useState([])
     const [hour, setHour] = useState()
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     const isDentist = currentUser && currentUser.isDentist;
@@ -24,16 +25,25 @@ export default function Schedules(){
         })
         setEvents(data)
     }
+    const getFutureEvents = async () => {
+        const {data} = await Schedule.GetFutureAppointments();
+        data.forEach((e) => {
+            e.start = new Date(e.start)
+            e.end = new Date(e.end)
+        })
+        setFutureEvents(data)
+    }
     const getHour = async () => {
         const {data} = await Schedule.GetCancellationHour();
         setHour(data)
     }
-
     const context = {
         events: events,
+        futureEvents: futureEvents,
         hour: hour,
         getEvents: getEvents,
         getHour: getHour,
+        getFutureEvents: getFutureEvents
     }
     const handleLogout = () => {
         localStorage.clear();

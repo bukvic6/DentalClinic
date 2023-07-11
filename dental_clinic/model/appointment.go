@@ -14,3 +14,7 @@ type AppointmentRequest struct {
 	StartDate time.Time `json:"start"`
 	EndDate   time.Time `json:"end"`
 }
+type FutureAppointments struct {
+	StartDate time.Time `json:"start"`
+	EndDate   time.Time `json:"end"`
+}

@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import Schedule from "../services/Schedule";
-import "./MySchedules.css"
+import "./UserSchedules.css"
 
 export default function Myschedules({context}){
   const events = context.events
+  const futureEvents = context.getFutureEvents
   const getEvents = context.getEvents
   const hour = context.hour
   const getHour = context.getHour
@@ -38,7 +39,7 @@ export default function Myschedules({context}){
     useEffect(() => {
       getEventsfromClient();
       getHour();
-    },[]);
+    },[events]);
 
     const shouldShowCancel = (event) => {
       const timeDifference = event.start - new Date();

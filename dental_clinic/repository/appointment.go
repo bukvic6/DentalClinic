@@ -5,6 +5,7 @@ import (
 	uuid2 "github.com/satori/go.uuid"
 	"gorm.io/gorm"
 	"log"
+	"time"
 )
 
 type AppointmentRepository struct {
@@ -82,5 +83,14 @@ func (ar *AppointmentRepository) GetHour() (preferences *model.Preferences, err 
 	}
 
 	return hour, nil
-
+}
+func (ar *AppointmentRepository) GetFutureAppointments() ([]*model.FutureAppointments, error) {
+	ar.l.Println("Appointment Repository - Future Appointments")
+	dateNow := time.Now()
+	ar.l.Println(dateNow)
+	var appointments []*model.FutureAppointments
+	if err := ar.db.Table("appointments").Where("start_date > ?", dateNow).Find(&appointments).Error; err != nil {
+		return nil, err
+	}
+	return appointments, nil
 }
