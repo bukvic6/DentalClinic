@@ -22,6 +22,9 @@ func InitAppointmentService(log *log.Logger, repo repository.IAppointmentRepo) *
 }
 func (as *AppointmentService) ScheduleAppointment(request *model.AppointmentRequest) error {
 	as.l.Println("Appointment Service - ScheduleAppointment")
+	if request.UserEmail == "" {
+		return errors.New("email is necessary")
+	}
 
 	exists := as.repo.CheckOverlapping(request.StartDate.Format("2006-01-02 15:04:05-07"), request.EndDate.Format("2006-01-02 15:04:05-07"))
 	//missing check if appointment duration is greater than 1 hour

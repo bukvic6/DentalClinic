@@ -4,13 +4,14 @@ import { useEffect, useCallback, useState, useMemo } from 'react';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import Schedule from '../services/Schedule';
 import moment from 'moment-timezone/builds/moment-timezone-with-data-10-year-range.js';
+import { useNavigate } from 'react-router-dom';
 
 
 export default function ReactBigCalendar({ context }) {
   moment.tz.setDefault('Europe/Paris')
 
   const localizer = momentLocalizer(moment)
-
+  const navigate = useNavigate();
   const events = context.events
   const getEvents = context.getEvents
   const futureEvents = context.futureEvents
@@ -61,20 +62,21 @@ export default function ReactBigCalendar({ context }) {
 
     }
     if (isDentist) {
-      setModalDentistData({ start: start.toISOString(), end: end.toISOString() });
+      setModalDentistData({ start: start, end: end});
       toggleDentistModal();
       return;
     }
     try {
       const startTimezoneOffset = start.getTimezoneOffset() * 60000;
       const endTimezoneOffset = end.getTimezoneOffset() * 60000;
-
       const startWithOffset = new Date(start.getTime() - startTimezoneOffset);
       const endWithOffset = new Date(end.getTime() - endTimezoneOffset);
       const appointment = { title: currentUser.userEmail, start: startWithOffset, end: endWithOffset };
-      const resp = await Schedule.ScheduleAppointment(appointment);
+      await Schedule.ScheduleAppointment(appointment);
       await getEvents();
       await getFutureEvents();
+      window.location.reload();     
+      //cannot fix problem with rendering userShedules after creating new appointment, needed useNavigate :/ fix after
     } catch (error) {
       console.log(error);
     }
@@ -88,7 +90,6 @@ export default function ReactBigCalendar({ context }) {
   };
 
   const handleSelectEvent = ({ event_id, start, end, title }) => {
-    console.log(start)
     setModalData({ event_id: event_id, start: start.toLocaleString(), end: end.toLocaleString(), title: title });
     toggleModal();
   }
@@ -107,8 +108,11 @@ export default function ReactBigCalendar({ context }) {
   const handleCreateAppointment = async (e) => {
     e.preventDefault()
     try {
-      const appointment = { title: email, start: modalDentistData.start, end: modalDentistData.end };
-      console.log(appointment.toString())
+      const startTimezoneOffset = modalDentistData.start.getTimezoneOffset() * 60000;
+      const endTimezoneOffset = modalDentistData.end.getTimezoneOffset() * 60000;
+      const startWithOffset = new Date( modalDentistData.start.getTime() - startTimezoneOffset);
+      const endWithOffset = new Date(modalDentistData.end.getTime() - endTimezoneOffset);
+      const appointment = { title: email, start: startWithOffset, end: endWithOffset };
       await Schedule.ScheduleAppointment(appointment);
       await getEvents();
       await getFutureEvents();
@@ -124,6 +128,7 @@ export default function ReactBigCalendar({ context }) {
   }, [userEvents]);
   return (
     <div className='Calendar'>
+      <h4>Slide to schedule</h4>
       <Calendar
         dayLayoutAlgorithm={nooverlap}
         localizer={localizer}

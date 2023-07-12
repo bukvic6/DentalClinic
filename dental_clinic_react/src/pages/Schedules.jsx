@@ -1,4 +1,4 @@
-import { Box, Center, Flex, Grid, Spacer } from "@chakra-ui/layout";
+import { Flex } from "@chakra-ui/layout";
 import { Button } from "@chakra-ui/react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -81,6 +81,7 @@ export default function Schedules() {
         localStorage.clear();
         navigate("/")
     };
+    
 
     return (
         <>

@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Schedule from "../services/Schedule";
-import { Input, Button, ButtonGroup, Box, Center, AbsoluteCenter } from "@chakra-ui/react";
+import { Input, Button, Box, AbsoluteCenter } from "@chakra-ui/react";
 import "./Home.css"
 
 export default function Home() {
@@ -13,8 +13,6 @@ export default function Home() {
     const login = { email: email };
     try {
       const { data } = await Schedule.Login(login);
-      console.log("ovde ce isprintati")
-      console.log(data.is_dentist)
       const userDataJSON = JSON.stringify({
         userEmail: data.email,
         isDentist: data.is_dentist

@@ -5,7 +5,6 @@ import Schedule from "../services/Schedule";
 export default function HoursForm({ context }) {
     const hour = context.hour
     const getHour = context.getHour
-    const initialValue = hour;
     const [successMessage, setSuccessMessage] = useState('');
 
     const handleChangeHours = async (e) => {

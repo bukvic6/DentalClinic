@@ -1,10 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Schedule from "../services/Schedule";
 import {
   Table,
   Thead,
   Tbody,
-  Tfoot,
   Tr,
   Th,
   Td,
@@ -17,18 +16,20 @@ import {
 import "./UserSchedules.css"
 
 export default function Myschedules({ context }) {
-  const events = context.events
   const userEvents = context.userEvents
+  const futureEvents = context.futureEvents
   const getEventsFromUser = context.getEventsFromUser
+  const getFutureEvents = context.getFutureEvents
   const hour = context.hour
   const getHour = context.getHour
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-  const isDentist = currentUser && currentUser.isDentist;
 
   const cancelEvent = async (eventId, start) => {
     console.log(eventId)
     try {
-      const cancelRequest = { user_email: currentUser.userEmail, start: start };
+      // const startTimezoneOffset = start.getTimezoneOffset() * 60000;
+      // const startWithOffset = new Date( start.getTime() - startTimezoneOffset);
+      const cancelRequest = { user_email: currentUser.userEmail, start: start.toLocaleString() };
       await Schedule.CancelAppointment(eventId, cancelRequest);
       getEventsFromUser();
     } catch (error) {
@@ -37,14 +38,13 @@ export default function Myschedules({ context }) {
   }
   useEffect(() => {
     getEventsFromUser();
+    getFutureEvents()
     getHour();
-  }, [events]);
+  }, []);
 
   const shouldShowCancel = (event) => {
     const check = hour * 60 * 60 * 1000;
-    console.log(event.start)
     const timeDifference = event.start - new Date();
-    console.log('Time Difference:', timeDifference);
     return timeDifference > check;
   };
 
