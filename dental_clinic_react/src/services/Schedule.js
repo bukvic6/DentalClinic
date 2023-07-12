@@ -4,28 +4,29 @@ const SCHEDULE_BASE_API = "http://localhost:8081/api"
 
 
 class ScheduleService {
-    
-    Login(email){
+
+    Login(email) {
         return axios.post(SCHEDULE_BASE_API + "/login", email)
     }
-    ScheduleAppointment(appointment){
-        return axios.post(SCHEDULE_BASE_API + "/scheduleAppointment",appointment)
+    ScheduleAppointment(appointment) {
+        return axios.post(SCHEDULE_BASE_API + "/scheduleAppointment", appointment)
     }
-    GetAllAppointments(){
+    GetAllAppointments() {
         return axios.get(SCHEDULE_BASE_API + "/getAllAppointments")
     }
-    GetFutureAppointments(){
+    GetFutureAppointments() {
         return axios.get(SCHEDULE_BASE_API + "/getFutureAppointments")
     }
-    CancelAppointment(id, cancelRequest){
-        return axios.delete(SCHEDULE_BASE_API + `/cancelAppointment/${id}`, { data: cancelRequest });    }
-    GetAllUserAppointments(headers){
-        return axios.get(SCHEDULE_BASE_API + `/getClientAppointments`, {headers: headers})
+    CancelAppointment(id, cancelRequest) {
+        return axios.delete(SCHEDULE_BASE_API + `/cancelAppointment/${id}`, { data: cancelRequest });
     }
-    ChangeCancellationHours(hours){
+    GetAllUserAppointments(headers) {
+        return axios.get(SCHEDULE_BASE_API + `/getClientAppointments`, { headers: headers })
+    }
+    ChangeCancellationHours(hours) {
         return axios.put(SCHEDULE_BASE_API + `/changeHours/${hours}`)
     }
-    GetCancellationHour(){
+    GetCancellationHour() {
         return axios.get(SCHEDULE_BASE_API + `/getHour`)
     }
 }

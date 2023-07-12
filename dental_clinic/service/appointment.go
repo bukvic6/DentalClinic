@@ -24,6 +24,7 @@ func (as *AppointmentService) ScheduleAppointment(request *model.AppointmentRequ
 	as.l.Println("Appointment Service - ScheduleAppointment")
 
 	exists := as.repo.CheckOverlapping(request.StartDate.Format("2006-01-02 15:04:05-07"), request.EndDate.Format("2006-01-02 15:04:05-07"))
+	//missing check if appointment duration is greater than 1 hour
 
 	as.l.Println(exists)
 

@@ -6,19 +6,19 @@ import Schedules from './pages/Schedules';
 import { ChakraProvider } from '@chakra-ui/react';
 
 function App() {
-return (
-  <>
-  <ChakraProvider>
-    <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<Home/>} />
-        <Route path='/schedules' element={<Schedules/>} />
-      </Routes>
-    </BrowserRouter>
-    </ChakraProvider>
+  return (
+    <>
+      <ChakraProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path='/' element={<Home />} />
+            <Route path='/schedules' element={<Schedules />} />
+          </Routes>
+        </BrowserRouter>
+      </ChakraProvider>
 
-  </>
-)
+    </>
+  )
 }
 
 export default App;

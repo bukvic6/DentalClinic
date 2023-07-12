@@ -1,19 +1,16 @@
 html {
   height: 100%;
 }
+
 body {
   min-height: 100%;
 }
 
 .home_image {
-      text-align: center;
-      background-image:  url("../assets/homePicture.jpg");
-        /* Full height */
-    height: 100vh; 
-
-  /* Center and scale the image nicely */
+  text-align: center;
+  background-image: url("../assets/homePicture.jpg");
+  height: 100vh;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  }
-
+}
