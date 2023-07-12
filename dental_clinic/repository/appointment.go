@@ -94,3 +94,12 @@ func (ar *AppointmentRepository) GetFutureAppointments() ([]*model.FutureAppoint
 	}
 	return appointments, nil
 }
+func (ar *AppointmentRepository) CheckOverlapping(start string, end string) bool {
+	ar.l.Println("Appointment Repository - Check overlapping")
+	var count int64
+	ar.db.Model(&model.Appointment{}).Where("start_date < ? AND end_date > ?", end, start).Count(&count)
+	if count != 0 {
+		return true
+	}
+	return false
+}

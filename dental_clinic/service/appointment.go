@@ -3,6 +3,7 @@ package service
 import (
 	"dental_clinic/model"
 	"dental_clinic/repository"
+	"errors"
 	"fmt"
 	"log"
 	"net/smtp"
@@ -21,6 +22,17 @@ func InitAppointmentService(log *log.Logger, repo repository.IAppointmentRepo) *
 }
 func (as *AppointmentService) ScheduleAppointment(request *model.AppointmentRequest) error {
 	as.l.Println("Appointment Service - ScheduleAppointment")
+
+	exists := as.repo.CheckOverlapping(request.StartDate.Format("2006-01-02 15:04:05-07"), request.EndDate.Format("2006-01-02 15:04:05-07"))
+
+	as.l.Println(exists)
+
+	if exists == true {
+		as.l.Println("there is a overlapping between appointments")
+
+		return errors.New("there is a overlapping between appointments")
+	}
+
 	err := as.repo.ScheduleAppointment(request)
 	if err != nil {
 		return err

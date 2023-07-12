@@ -19,47 +19,34 @@ import "./UserSchedules.css"
 
 export default function Myschedules({context}){
   const events = context.events
-  const futureEvents = context.getFutureEvents
-  const getEvents = context.getEvents
+  const userEvents = context.userEvents
+  const getEventsFromUser = context.getEventsFromUser
   const hour = context.hour
   const getHour = context.getHour
-  const [myevents, setMyEvents] = useState([])    
-
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-
-  const headers = {
-      'Content-Type': 'application/json',
-      'Authorization': `UserEmail ${currentUser.userEmail}`
-    }
-
-    const getEventsfromClient = async () => {
-        const {data} = await Schedule.GetAllUserAppointments(headers);
-        data.forEach((e) => {
-            e.start = new Date(e.start)
-            e.end = new Date(e.end)
-        })
-        setMyEvents(data)
-    }
+  const isDentist = currentUser && currentUser.isDentist;
     
     const cancelEvent = async (eventId, start) =>{
       console.log(eventId)
         try {
           const cancelRequest = { user_email: currentUser.userEmail, start:start};
           await Schedule.CancelAppointment(eventId, cancelRequest);
-          getEvents();
-          getEventsfromClient();
+          getEventsFromUser();
         } catch (error) {
           console.log("Error cancelling appointment:", error);   
         }
     }
     useEffect(() => {
-      getEventsfromClient();
+      getEventsFromUser();
       getHour();
     },[events]);
 
     const shouldShowCancel = (event) => {
+      const check = hour * 60 * 60 * 1000;
+      console.log(event.start)
       const timeDifference = event.start - new Date();
-      return timeDifference > hour * 60 * 60 * 1000;
+      console.log('Time Difference:', timeDifference); 
+      return timeDifference > check;
     };
     
 
@@ -80,7 +67,7 @@ export default function Myschedules({context}){
             </Thead>
 
             <Tbody>
-            {myevents.map((event) => (
+            {userEvents.map((event) => (
               <Tr className="table-row" key={event.id}>
                 <Td className="col col-2" data-label="Date">
                   {event.start.toDateString()}

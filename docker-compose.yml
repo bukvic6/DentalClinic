@@ -31,5 +31,16 @@ services:
       timeout: 10s
       retries: 20
 
+
+  dental_clinic_react:
+    hostname: dental_clinic_react
+    ports:
+      - 3000:3000
+    restart: always
+    build:
+        context: dental_clinic_react
+    depends_on:
+      - dental_clinic
+
 volumes:
   postgres:

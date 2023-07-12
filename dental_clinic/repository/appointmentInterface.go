@@ -10,4 +10,5 @@ type IAppointmentRepo interface {
 	ChangeHoursForCancellation(hours string) error
 	GetHour() (preferences *model.Preferences, err error)
 	GetFutureAppointments() ([]*model.FutureAppointments, error)
+	CheckOverlapping(start string, end string) bool
 }
