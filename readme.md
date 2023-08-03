@@ -25,7 +25,8 @@ front on: localhost:3000
 backend on: localhost:8081
 
 -------------------------------------
-
-
+![Screenshot from 2023-08-03 11-42-27](https://github.com/bukvic6/DentalClinic/assets/79896979/e60b24e9-e7a3-475e-980a-6c432a62e4c4)
+![Screenshot from 2023-08-03 11-45-47](https://github.com/bukvic6/DentalClinic/assets/79896979/cadcb097-625b-4da6-8240-a2ac78213789)
+![Screenshot from 2023-08-03 11-48-17](https://github.com/bukvic6/DentalClinic/assets/79896979/8caba17e-4950-4da9-b2b3-3221341bbca4)
 
 
